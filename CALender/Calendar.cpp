@@ -1,8 +1,8 @@
 #include <iostream>
+#include <iomanip>
 #include <ctime>
 #pragma warning(disable : 4996)
 using namespace std;
-
 
 
 class event {
@@ -37,9 +37,9 @@ public:
     int getYear() {
         return year;
     }
-	int getCount() {
-		return count;
-	}
+    int getCount() {
+        return count;
+    }
     void setName(string n) {
         name = n;
     }
@@ -61,13 +61,13 @@ public:
     void setYear(int y) {
         year = y;
     }
-	void setCount(int c) {
-		count = c;
-	}
+    void setCount(int c) {
+        count = c;
+    }
     friend ostream& operator << (ostream& out, const event& e);
     friend istream& operator >> (istream& in, event& e);
     friend event operator - (event e1);
-    //friend event operator + (event e1);
+    friend event operator + (event e1);
     event() {
         name = "Empty Event";
         sec = 0;
@@ -87,44 +87,98 @@ public:
         year = y;
     }
     event operator = (event e1) {
-        event e2;
-        e2.setName(e1.getName());
-        e2.setSec(e1.getSec());
-        e2.setMin(e1.getMin());
-        e2.setHour(e1.getHour());
-        e2.setDay(e1.getDay());
-        e2.setMonth(e1.getMonth());
-        e2.setYear(e1.getYear());
-        return e2;
+        this->setName(e1.getName());
+        this->setSec(e1.getSec());
+        this->setMin(e1.getMin());
+        this->setHour(e1.getHour());
+        this->setDay(e1.getDay());
+        this->setMonth(e1.getMonth());
+        this->setYear(e1.getYear());
+        return *this;
     }
     event current() {
         time_t now = time(0);
         tm* current_time = localtime(&now);
         return event("Today", current_time->tm_hour, current_time->tm_min, current_time->tm_sec, current_time->tm_mday, current_time->tm_mon + 1, current_time->tm_year + 1900);
     }
-	event operator + (event e1) {
-		event e2;
-		e2.setSec(e1.getSec() + sec);
-		e2.setMin(e1.getMin() + min);
-		e2.setHour(e1.getHour() + hour);
-		e2.setDay(e1.getDay() + day);
-		e2.setMonth(e1.getMonth() + month);
-		e2.setYear(e1.getYear() + year);
-		return e2;
-	}
+    event operator + (event& e1) {
+        event e2;
+        int s = e1.getSec() + this->getSec();
+        int m = e1.getMin() + this->getMin();
+        int h = e1.getHour() + this->getHour();
+        int d = e1.getDay() + this->getDay();
+        int mo = e1.getMonth() + this->getMonth();
+        int y = e1.getYear() + this->getYear();
+        if (s > 60) {
+            s -= 60;
+            m++;
+        }
+        if (m > 60) {
+            m -= 60;
+            h++;
+        }
+        if (h > 24) {
+            h -= 24;
+            d++;
+        }
+        if (d > 30) {
+            d -= 30;
+            mo++;
+        }
+        if (mo > 12) {
+            mo -= 12;
+            y++;
+        }
+        event e3(e1.getName(), s, m, h, d, mo, y);
+        return e3;
+    }
+
+    event operator - (event& e1) {
+        int s = this->getSec() - e1.getSec();
+        int m = this->getMin() - e1.getMin();
+        int h = this->getHour() - e1.getHour();
+        int d = this->getDay() - e1.getDay();
+        int mo = this->getMonth() - e1.getMonth();
+        int y = this->getYear() - e1.getYear();
+        if (s < 0) {
+            s += 60;
+            m--;
+        }
+        if (m < 0) {
+            m += 60;
+            h--;
+        }
+        if (h < 0) {
+            h += 24;
+            d--;
+        }
+        if (d < 0) {
+            d += 30;
+            mo--;
+        }
+        if (mo < 0) {
+            mo += 12;
+            y--;
+        }
+        event e3("Time Left till Event:", s, m, h, d, mo, y);
+        return e3;
+    }
 };
+
 int event ::count = 0;
 ostream& operator << (ostream& out, const event& e) {
+    out << "----------------------------------"<< endl;
     out << "Event name: " << e.name << endl;
-    out << "Time :" << e.sec << ":" << e.min << ":" << e.hour;
-    out << "Date :" << e.day << "-" << e.month << "-" << e.year;
-    cout<<endl<<endl;
+    cout << "SS : MM : HH  |  DD - MM - YYYY" << endl;
+    out << setfill('0') << setw(2) << e.sec << " : " << setfill('0') << setw(2) << e.min << " : " << setfill('0') << setw(2) << e.hour << "  |  ";
+    out << setfill('0') << setw(2) << e.day << " - " << setfill('0') << setw(2) << e.month << " - " << setfill('0') << setw(4) << e.year << endl;
+    out << "----------------------------------"<< endl;
     return out;
 }
 istream& operator >> (istream& in, event& e) {
-    cout << "Enter name of event: ";
+    cout << "\n\nEnter name of event: ";
     cin >> e.name;
-    cout << "\nEnter day of event: ";
+    cout << "Enter day : ";
     do {
         cin >> e.day;
         if (e.day < 1 || e.day>31) {
@@ -132,7 +186,7 @@ istream& operator >> (istream& in, event& e) {
         }
     } while (e.day < 1 || e.day>31);
 
-    cout << "\nEnter month of event: ";
+    cout << "Enter month : ";
     do {
         cin >> e.month;
         if (e.month < 1 || e.month>12) {
@@ -140,7 +194,7 @@ istream& operator >> (istream& in, event& e) {
         }
     } while (e.month < 1 || e.month>12);
 
-    cout << "\nEnter year of event: ";
+    cout << "Enter year : ";
     do {
         cin >> e.year;
         if (e.year < 0) {
@@ -148,7 +202,7 @@ istream& operator >> (istream& in, event& e) {
         }
     } while (e.year < 0);
 
-    cout << "\nEnter hour of event: ";
+    cout << "Enter hour : ";
     do {
         cin >> e.hour;
         if (e.hour < 0 || e.hour>23) {
@@ -156,7 +210,7 @@ istream& operator >> (istream& in, event& e) {
         }
     } while (e.hour < 0 || e.hour>23);
 
-    cout << "\nEnter minute of event: ";
+    cout << "Enter minute : ";
     do {
         cin >> e.min;
         if (e.min < 0 || e.min>59) {
@@ -164,7 +218,7 @@ istream& operator >> (istream& in, event& e) {
         }
     } while (e.min < 0 || e.min>59);
 
-    cout << "\nEnter second of event: ";
+    cout << "Enter second : ";
     do {
         cin >> e.sec;
         if (e.sec < 0 || e.sec>59) {
@@ -174,37 +228,7 @@ istream& operator >> (istream& in, event& e) {
     return in;
 
 }
-event operator - (event &e1) {
-    event today = today.current();
-    int s = e1.getSec() - today.getSec();
-    int m = e1.getMin() - today.getMin();
-    int h = e1.getHour() - today.getHour();
-    int d = e1.getDay() - today.getDay();
-    int mo = e1.getMonth() - today.getMonth();
-    int y = e1.getYear() - today.getYear();
-    if (s < 0) {
-        s += 60;
-        m--;
-    }
-    if (m < 0) {
-        m += 60;
-        h--;
-    }
-    if (h < 0) {
-        h += 24;
-        d--;
-    }
-    if (d < 0) {
-        d += 30;
-        mo--;
-    }
-    if (mo < 0) {
-        mo += 12;
-        y--;
-    }
-    event e3("Time Left till Event:", s, m, h, d, mo, y);
-    return e3;
-}
+
 event operator + (event e1) {
     event e2 = e2.current();
     int s = e1.getSec() + e2.getSec();
@@ -219,13 +243,13 @@ event operator + (event e1) {
 }
 
 void newEvent(event* e, int i) {
-	e->setCount(i);
+    e->setCount(i);
     cin >> *(e + i - 1);
-	cout << "\nEvent created successfully" << endl;
+    cout << "\nEvent created successfully" << endl;
     cout << *(e + i - 1);
 }
 
-void print(event *e) {
+void print(event* e) {
     for (int i = 0; i < e->getCount(); i++)
     {
         cout << "\n\n>Event " << i + 1 << ":" << endl;
@@ -239,28 +263,49 @@ void viewEvent(event* e) {
     cout << *(e + n - 1);
     event left;
     event current = current.current();
-    left = (*(e + n - 1) - current);
+    left = *(e + n - 1) - current;  //Time left till event error here
     cout << left;
+}
+
+void newExisting(event* e, int i) {
+	e->setCount(i);
+	cout << "Enter the event number you want to add to: ";
+	int n;
+	cin >> n;
+    
+    event obj;
+    cout << "Enter the date and time you want to add to " << n << "Event :\n";
+    cin >> obj;
+	cout << *(e + n - 1) + obj;
+    event add = *(e + n - 1) + obj;
+	cout << "\nEvent created successfully" << endl;
+	//cout << *(e + i - 1);
+    *(e + i - 1) = add;
 }
 void menu(event* e)
 {
-	cout << "Total events: " << e->getCount() << endl;
+    cout << "Total events: " << e->getCount() << endl;
     cout << "1. Create new event" << endl;
-    cout << "2. View Existing Event" << endl;
-    cout << "3. Exit" << endl;
+	cout << "2. Add New event from Existing Event" << endl;
+    cout << "3. View Existing Event" << endl;
+    cout << "4. Exit" << endl;
     cout << "Enter your choice: ";
     int n;
     cin >> n;
     switch (n)
     {
     case 1:
-        newEvent(e, e->getCount()+1);
+        newEvent(e, e->getCount() + 1);
         break;
-    case 2:
+	case 2:
+        print(e);
+		newExisting(e, e->getCount() + 1);
+		break;
+    case 3:
         print(e);
         viewEvent(e);
         break;
-    case 3:
+    case 4:
         cout << "\nClosing Calender<!>";
         return;
         break;
@@ -271,8 +316,6 @@ void menu(event* e)
     }
     menu(e);
 }
-
-
 
 int main() {
     event* e = new event[3];
