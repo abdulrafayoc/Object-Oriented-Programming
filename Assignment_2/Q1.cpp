@@ -33,27 +33,25 @@ private:
 public:
     Image()
     {
-
-        image = new Pixel**[depth];
-
-        for (int i = 0; i < depth; i++) 
-        {
-            image[depth] = new Pixel*[row];
-            for (int j = 0; j < row;j++) 
-            {
-                image[depth][row] = new Pixel[col];
-            }
-        }
-
+        depth = 0;
         row = 0;
         col = 0;
-        depth = 0;
     }
-    Image(int d = 1, int c = 1, int r = 1)
+    Image(int d = 1, int r = 1, int c = 1)
     {
+        depth = d;
         row = r;
         col = c;
-        depth = d;
+        image = new Pixel * *[depth];
+
+        for (int i = 0; i < depth; i++)
+        {
+            image[i] = new Pixel * [row];
+            for (int j = 0; j < row; j++)
+            {
+                image[i][j] = new Pixel[col];
+            }
+        }
     }
     Image(const Image &img)
     {
@@ -66,6 +64,7 @@ public:
         row = 0;
         col = 0;
         depth = 0;
+		delete[] image;
     }
     //Getters and Setters
     void setRow(int r)
@@ -97,7 +96,7 @@ public:
     {
         return image[x][y][z];
     }
-    Pixel setPixel(int x, int y, int z, Pixel p)
+    void setPixel(int x, int y, int z, Pixel p)
     {
         image[x][y][z] = p;
     }
@@ -113,6 +112,7 @@ public:
                 }
             }
         }
+        return;
     }
     void clear()
     {
@@ -122,20 +122,24 @@ public:
         {
             for (int j = 0; j < col; j++)
             {
+                for (int k = 0; k < depth; k++)
+                {
                     image[i][j][k] = black;
+                }
             }
         }
+        return;
     }
     double getAverageBrightness()
     {
-        double avg = 0;
+        double avg = 0.000;
         for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < col; j++)
             {
                 for (int k = 0; k < depth; k++)
                 {
-                    avg += (image[i][j][k].red + image[i][j][k].green + image[i][j][k].blue) / 3;
+                    avg += ((double)image[i][j][k].red + (double)image[i][j][k].green + (double)image[i][j][k].blue) / 3;
                 }
             }
         }
@@ -149,22 +153,27 @@ public:
         {
             for (int j = 0; j < col; j++)
             {
-                if (image[depth][i][j].red + image[depth][i][j].green + image[depth][i][j].blue > max)
-                {
-                    max = image[depth][i][j].red + image[depth][i][j].green + image[depth][i][j].blue;
+                if (image[depth][i][j].red > max) {
+                    max = image[depth][i][j].red;
+                }
+                if (image[depth][i][j].green > max) {
+                    max = image[depth][i][j].green;
+                }
+                if (image[depth][i][j].blue > max) {
+                    max = image[depth][i][j].blue;
                 }
             }
         }
-        return max;
+        return max/3;
     }
     int countBrightPixel()
     {
-        int count;
-        for (int i = 0; i < row; i++)
+        int count = 0;
+        for (int i = 0; i < depth; i++)
         {
-            for (int j = 0; j < col; j++)
+            for (int j = 0; j < row; j++)
             {
-                for (int k = 0; k < depth; k++)
+                for (int k = 0; k < col; k++)
                 {
                     if (image[i][j][k].red == 255 || image[i][j][k].green == 255 || image[i][j][k].blue == 255)
                     {
@@ -173,6 +182,7 @@ public:
                 }
             }
         }
+        return count;
     }
     void transposePixel(int depth)
     {
@@ -189,5 +199,13 @@ public:
 
 int main()
 {
-
+    Image img(3, 3, 3);
+    Pixel p(255, 255, 255);
+    img.fill(p);
+    cout << img.getAverageBrightness() << endl;
+    cout << img.getMaximumBrightness(0) << endl;
+    cout << img.countBrightPixel() << endl;
+    img.transposePixel(0);
+    img.clear();
+    return 0;
 }

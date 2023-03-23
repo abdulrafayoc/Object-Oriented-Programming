@@ -94,40 +94,45 @@ public:
             return true;
         }
     }
-    char *substring(char* substr, int startIndex){////////////////////DO REcheckkkkkkkkkkkkkkkkkkk
+    char *substring(char* substr, int startIndex){
         int pos;
         for(int i = startIndex; i < size; i++){
             if (*(data + i) == *(substr)){
                 for(int j = 0; j < stringLength(substr); j++){
-                    if(*(data + i + j) == *(substr + j)){
-                        pos = i;
-                        break;
+                    if (*(data + i + j) == *(substr + j)) {
+                        if (j = stringLength(substr) - 1) {
+                            pos = i;
+                            break;
+                        }
                     }
                 }
             }
         }
         char *temp= new char[stringLength(substr) - pos];
-        for(int i = pos; i < stringLength(substr); i++){
-            *(temp + i) = *(data + i);
+        
+        for(int i = pos; i < stringLength(substr); i++) {
+            *(temp + i - pos) = *(data + i);
         }
         return temp;
     }
 
-    char *substring(char* substr, int startIndex, int endIndex){////////////////////DO REcheckkkkkkkkkkkkkkkkkkk
+    char *substring(char* substr, int startIndex, int endIndex){
         int pos;
-        for(int i = startIndex; i < size - endIndex; i++){
-            if (*(data + i) == *(substr)){
-                for(int j = 0; j < stringLength(substr); j++){
-                    if(*(data + i + j) == *(substr + j)){
-                        pos = i;
-                        break;
+        for (int i = startIndex; i < size; i++) {
+            if (*(data + i) == *(substr)) {
+                for (int j = 0; j < stringLength(substr); j++) {
+                    if (*(data + i + j) == *(substr + j)) {
+                        if (j = stringLength(substr) - 1) {
+                            pos = i;
+                            break;
+                        }
                     }
                 }
             }
         }
         char *temp = new char[endIndex - pos];
         for(int i = pos; i < endIndex; i++){
-            *(temp + i) = *(data + i);
+            *(temp + i - pos) = *(data + i);
         }
         return temp;
     }
@@ -142,3 +147,20 @@ public:
         }
     }
 };
+
+
+int main() {
+    String s1("Hello");
+    s1.Print();
+    cout << s1.charAt('l') << endl;
+    cout << s1.stringLength() << endl;
+    cout << "get data : " << s1.getData() << endl;
+    cout << "is EMpty : " << s1.isEmpty() << endl;
+    cout << "is Equal" << s1.isEqual("Hello") << endl;
+    cout << s1.equalsIgnoreCase("HELLO") << endl;
+    cout << s1.substring("llo", 2) << endl;
+    cout << s1.substring("llo", 2, 4) << endl;
+    cout << s1.equalsIgnoreCase("HELLO") << endl;
+
+    s1.clear();
+}

@@ -32,12 +32,6 @@ public:
     string getCourseCodes(int i){
         return coursecodes[i];
     }
-    int getNumCourses(){
-        return numCourses;
-    }
-    void setNumCourses(int num){
-        numCourses = num;
-    }
     int getCourseGrade(int i){
         return courseGrades[i];
     }
@@ -57,13 +51,6 @@ public:
             sum += courseGrades[i];
         }
         gpa = sum / numCourses;
-    }
-    void setCourseGrade(string courseCodes, int grades){
-        for(int i = 0; i < numCourses; i++){
-            if(courseCodes == coursecodes[i]){
-                courseGrades[i] = grades;
-            }
-        }
     }
     void addCourse(string courseCode, int grade){
         string *temp = new string[numCourses + 1];
@@ -139,4 +126,23 @@ void printAllStudentRecord(Student students[],int numStudents){
         }
         cout << "Student GPA: " << students[i].getGPA() << endl;
     }
+}
+
+int main() {
+    Student students[5];
+    for (int i = 0; i < 5; i++) {
+        students[i].setStdID(i);
+        students[i].setName("Student" + i);
+        students[i].setNumCourses(3);
+        students[i].setCourseGrade("CS101", 90);
+        students[i].setCourseGrade("CS102", 80);
+        students[i].setCourseGrade("CS103", 70);
+        students[i].calcGPA();
+    }
+    cout << students->getNumCourses();
+    printAllStudentRecord(students, 5);
+    cout << "Class GPA: " << calcClassGPA(students, 5) << endl;
+    cout << "Max GPA: " << getMaxGPA(students, 5) << endl;
+    cout << "Min GPA: " << getMinGPA(students, 5) << endl;
+    return 0;
 }

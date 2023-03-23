@@ -39,12 +39,6 @@ public:
         author = auth;
     }
     void setBookID(int id){
-        for(int i = 0; i < totalBooks; i++){
-            if(id == bookID){
-                cout << "This book already exists" << endl;
-                return;
-            }
-        }
         bookID = id;
     }
     void setQuantity(int q){
@@ -141,4 +135,24 @@ Library mostExpensiveBook(Library  books[10]){
     }
     return exp;
 }
+
+int main() {
+    Library books[10];
+
+    //books[1].setBookTitle("Stillness is the Key");
+    //books[1].setAuthor("Ryan Holiday");
+    books[1].setBookID(1);
+    books[1].setQuantity(10);
+    books[1].setPrice(100);
+
+    //cout << books[1].getBookTitle() << endl;
+    //cout << books[1].getAuthor() << end
+    cout << books[1].getBookID() << endl;
+    cout << books[1].getQuantity() << endl;
+    cout << books[1].getPrice() << endl;
+    cout << books[1].getTotalBooks() << endl;
+
+
+}
+
 

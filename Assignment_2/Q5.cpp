@@ -61,14 +61,14 @@ public:
     }
     static int numberOfLeadingZeros(int i){
         int count = 0;
-        while(i != 0){
-            if(i % 2 == 1){
-                return count;
-            }
-            count++;
-            i = i / 2;
-        }
-        return count;
+		while (i != 0) {
+			if (i % 2 == 1) {
+				return count;
+			}
+			count++;
+			i = i / 2;
+		}
+		return count;
     }
     static int numberOfTrailongZeros(int i){
         int count = 0;
@@ -81,18 +81,19 @@ public:
         }
         return count;
     }
-    static int toBinaryString(int i)
+    static string toBinaryString(int i)
     {
-        string bin;
-        while(i != 0){
-            if(i % 2 == 1){
-                bin += "1";
-            }
-            else{
-                bin += "0";
-            }
-            i = i / 2;
-        }
+		int binary = 0;
+		int count = 0;
+		while (i != 0) {
+			if (i % 2 == 1) {
+				binary += pow(10, count);
+			}
+			count++;
+			i = i / 2;
+		}
+		string str = to_string(binary);
+		return str;
     }
     static string toHexString(int i)
     {
@@ -125,3 +126,20 @@ public:
     }
 
 };
+int main() {
+    Integer i1(10);
+    Integer i2(20);
+	cout << i1.plus(i2) << endl;//output 30
+	cout << i1.minus(i2) << endl;//output -10
+	cout << i1.multiple(i2) << endl;//output 200
+	cout << i1.divide(i2) << endl;//output 0
+	cout << i1.compareTo(i2) << endl;//output 0
+	cout << i1.doubleValue() << endl;//output 10.0
+	cout << i1.floatValue() << endl;//output 10.0
+	cout << i1.bitCount() << endl;//output 2
+	cout << Integer::numberOfLeadingZeros(10) << endl;//output 28
+	cout << Integer::numberOfTrailongZeros(10) << endl;//output 1
+	cout << Integer::toBinaryString(10) << endl;//output 1010
+	cout << Integer::toHexString(10) << endl;//output A
+    return 0;
+}
