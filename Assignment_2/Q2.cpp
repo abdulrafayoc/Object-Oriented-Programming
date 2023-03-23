@@ -1,5 +1,4 @@
 #include <iostream>
-
 using namespace std;
 
 class Pizza
@@ -12,9 +11,12 @@ class Pizza
 public:
     Pizza()
     {
-        name = '\0';
-        topping = '\0';
-        size = '\0';
+        name = new char[1];
+        topping = new char[1];
+        size = new char[1];
+        *name = '\0';
+        *topping = '\0';
+        *size = '\0';
         is_ready = false;
         price = 0;
     }

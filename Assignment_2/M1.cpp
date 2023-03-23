@@ -1,187 +1,140 @@
 #include <iostream>
-#include <cstring>
+
 using namespace std;
 
-class Pizza {
-    char* name;
-    char* toppings;
-    char* size;
-    bool is_ready;
-    double price;
-
+class Student {
+private:
+    int stdID;
+    string Name;
+    string* coursecodes;
+    int numCourses;
+    int* courseGrades;
+    float gpa;
 public:
-
-    Pizza() {
-        name = new char[1];
-        toppings = new char[1];
-        size = new char[1];
-        *name = '\0';
-        *toppings = '\0';
-        *size = '\0';
-        is_ready = false;
-        price = 0;
+    int getStdID() {
+        return stdID;
     }
-
-    Pizza(char* toppingVal, double priceVal) {
-        name = new char[1];
-        size = new char[1];
-        *name = '\0';
-        toppings = new char[strlen(toppingVal) + 1];
-        for (int i = 0; i < strlen(toppingVal) + 1; i++) {
-            toppings[i] = toppingVal[i];
-        }
-        *size = '\0';
-        price = priceVal;
-        is_ready = false;
+    void setStdID(int id) {
+        stdID = id;
     }
-
-    Pizza(char *toppingVal, double priceVal, char *nameVal, char* sizeVal, bool ready_status) {
-        name = new char[strlen(nameVal) + 1];
-        for (int i = 0; i < strlen(nameVal) + 1; i++) {
-            name[i] = nameVal[i];
-        }
-        toppings = new char[strlen(toppingVal) + 1];
-        for (int i = 0; i < strlen(toppingVal) + 1; i++) {
-            toppings[i] = toppingVal[i];
-        }
-        size = new char[strlen(sizeVal) + 1];
-        for (int i = 0; i < strlen(sizeVal); i++) {
-            size[i] = sizeVal[i];
-        }
-        price = priceVal;
-        is_ready = ready_status;
+    string getName() {
+        return Name;
     }
-
-    Pizza(const Pizza& pizza) {
-        name = new char[strlen(pizza.name) + 1];
-        for (int i = 0; i < strlen(pizza.name); i++) {
-            name[i] = pizza.name[i];
-        }
-        toppings = new char[strlen(pizza.toppings) + 1];
-        for (int i = 0; i < strlen(pizza.toppings); i++) {
-            toppings[i] = pizza.toppings[i];
-        }
-        size = new char[strlen(pizza.size) + 1];
-        for (int i = 0; i < strlen(pizza.size); i++) {
-            size[i] = pizza.size[i];
-        }
-        price = pizza.price;
-        is_ready = pizza.is_ready;
+    void setName(string firstName) {
+        Name = firstName;
     }
-
-    void setTopping(char* toppingVal) {
-        toppings = new char[strlen(toppingVal) + 1];
-        for (int i = 0; i < strlen(toppingVal); i++) {
-            toppings[i] = toppingVal[i];
+    int  getNumCourses() {
+        return numCourses;
+    }
+    void setNumCourses(int num) {
+        numCourses = num;
+		coursecodes = new string[numCourses];
+        courseGrades = new int[numCourses];
+    }
+    string getCourseCodes(int i) {
+        return coursecodes[i];
+    }
+    int getCourseGrade(int i) {
+        return courseGrades[i];
+    }
+    void setCourseGrade(string courseCodes, int grades) {
+        for (int i = 0; i < numCourses; i++) {
+            if (courseCodes == coursecodes[i]) {
+                courseGrades[i] = grades;
+            }
         }
     }
-
-    void setPrice(double priceVal) {
-        price = priceVal;
+    float getGPA() {
+        return gpa;
     }
-
-    void setName(char* nameVal) {
-        name = new char[strlen(nameVal) + 1];
-        for (int i = 0; i < strlen(nameVal); i++) {
-            name[i] = nameVal[i];
+    void calcGPA() {
+        int sum = 0;
+        for (int i = 0; i < numCourses; i++) {
+            sum += courseGrades[i];
         }
+        gpa = ((sum / numCourses)/20)-1;
     }
-
-    void setSize(char* sizeVal) {
-        size = new char[strlen(sizeVal) + 1];
-        for (int i = 0; i < strlen(sizeVal); i++) {
-            size[i] = sizeVal[i];
+    void addCourse(string courseCode, int grade) {
+        string* temp = new string[numCourses + 1];
+        int* temp2 = new int[numCourses + 1];
+        for (int i = 0; i < numCourses; i++) {
+            temp[i] = coursecodes[i];
+            temp2[i] = courseGrades[i];
         }
+        temp[numCourses] = courseCode;
+        temp2[numCourses] = grade;
+        delete[] coursecodes;
+        delete[] courseGrades;
+        coursecodes = temp;
+        courseGrades = temp2;
+        numCourses++;
     }
-
-    ~Pizza() {
-        delete[] toppings;
-    }
-
-    char* getSize() {
-        return size;
-    }
-
-    char* getName() {
-        return name;
-    }
-
-    char* getToppings() {
-        return toppings;
-    }
-
-    double getPrice() {
-        return price;
-    }
-
-    void makePizza() {
-        if (*toppings != '\0') {
-            is_ready = true;
-        }
-    }
-
-    bool check_status() {
-        return is_ready;
-    }
-
 };
 
+Student getStudentAt(Student students[], int index) {
+    return students[index];
+}
+float calcClassGPA(Student students[], int numStudents) {
+    float sum = 0;
+    for (int i = 0; i < numStudents; i++) {
+        sum += students[i].getGPA();
+    }
+    return sum / numStudents;
+}
+float getMaxGPA(Student students[], int numStudents) {
+    float max = students[0].getGPA();
+    for (int i = 1; i < numStudents; i++) {
+        if (students[i].getGPA() > max) {
+            max = students[i].getGPA();
+        }
+    }
+    return max;
+}
+int getMinGPA(Student students[], int numStudents) {
+    float min = students[0].getGPA();
+    for (int i = 1; i < numStudents; i++) {
+        if (students[i].getGPA() < min) {
+            min = students[i].getGPA();
+        }
+    }
+    return min;
+}
+void printStudentRecord(Student student) {
+    cout << "Student ID: " << student.getStdID() << endl;
+    cout << "Student Name: " << student.getName() << endl;
+    cout << "Student Courses: " << endl;
+    for (int i = 0; i < student.getNumCourses(); i++) {
+        cout << student.getCourseCodes(i) << " " << student.getCourseGrade(i) << endl;
+    }
+    cout << "Student GPA: " << student.getGPA() << endl;
+}
+void printAllStudentRecord(Student students[], int numStudents) {
+    for (int i = 0; i < numStudents; i++) {
+        cout << "Student ID: " << students[i].getStdID() << endl;
+        cout << "Student Name: " << students[i].getName() << endl;
+        cout << "Student Courses: " << endl;
+        for (int j = 0; j < students[i].getNumCourses(); j++) {
+            cout << students[i].getCourseCodes(j) << " " << students[i].getCourseGrade(j) << endl;
+        }
+        cout << "Student GPA: " << students[i].getGPA() << endl;
+    }
+}
+
 int main() {
-    char* name = new char[10];
-    char* size = new char[10];
-    char* toppings = new char[10];
-    double price = 0;
-    bool is_ready = false;
+    Student student;
+        student.setStdID(1);
+        student.setName("Student");
+        //student.setNumCourses(3);
+        student.addCourse("CS101", 90);
+        student.addCourse("CS102", 80);
+        student.addCourse("CS103", 70);
+        //cout << student.getCourseGrade(0);
 
-    Pizza pizza1;
-    cout << endl << "Enter name of pizza: ";
-    cin >> name;
-    pizza1.setName(name);
-    cout << endl << "Enter size of pizza: ";
-    cin >> size;
-    pizza1.setSize(size);
-    cout << endl << "Enter toppings of pizza: ";
-    cin >> toppings;
-    pizza1.setTopping(toppings);
-    cout << endl << "Enter price of pizza: ";
-    cin >> price;
-    pizza1.setPrice(price);
-    pizza1.makePizza();
-    cout << endl << "Pizza name: " << pizza1.getName();
-    cout << endl << "Pizza size: " << pizza1.getSize();
-    cout << endl << "Pizza toppings: " << pizza1.getToppings();
-    cout << endl << "Pizza price: " << pizza1.getPrice();
-    cout << endl << "Pizza ready status: " << pizza1.check_status();
-
-    Pizza pizza2(pizza1);
-
-    cout << endl << "Enter name of pizza: ";
-    cin >> name;
-    pizza2.setName(name);
-    cout << endl << "Enter size of pizza: ";
-    cin >> size;
-    pizza2.setSize(size);
-    cout << endl << "Enter toppings of pizza: ";
-    cin >> toppings;
-    pizza2.setTopping(toppings);
-    cout << endl << "Enter price of pizza: ";
-    cin >> price;
-    pizza2.setPrice(price);
-    pizza2.makePizza();
-
-    cout << endl << "Pizza name: " << pizza2.getName();
-    cout << endl << "Pizza size: " << pizza2.getSize();
-    cout << endl << "Pizza toppings: " << pizza2.getToppings();
-    cout << endl << "Pizza price: " << pizza2.getPrice();
-    cout << endl << "Pizza ready status: " << pizza2.check_status();
-
-    cout << endl << "Pizza name of pizza1: " << pizza1.getName();
-    cout << endl << "Pizza size of pizza1: " << pizza1.getSize();
-    cout << endl << "Pizza toppings of pizza1: " << pizza1.getToppings();
-    cout << endl << "Pizza price of pizza1: " << pizza1.getPrice();
-    cout << endl << "Pizza ready status of pizza1: " << pizza1.check_status();
-
-
-
+        student.calcGPA();
+    cout << student.getNumCourses();
+	printStudentRecord(student);
+    /*cout << "Class GPA: " << calcClassGPA(student, 5) << endl;
+    cout << "Max GPA: " << getMaxGPA(student, 5) << endl;
+    cout << "Min GPA: " << getMinGPA(student, 5) << endl;*/
     return 0;
 }

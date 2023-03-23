@@ -17,7 +17,7 @@ void OpenCustomerAccount(SavingAccount* savers[], int accountsOpen, char* NameVa
     savers[accountsOpen] = new SavingAccount{ NameVal, (float)balance };
     stringstream ss;
     ss << setw(2) << setfill('0') << accountsOpen;
-	savers[accountsOpen]->accountNum = new char[ss.str().length() + 1];
+    savers[accountsOpen]->accountNum = new char[ss.str().length() + 1];
     accountsOpen++;
 }
 float calculateMonthlyInterest(SavingAccount* saver) {
@@ -27,7 +27,7 @@ float calculateMonthlyInterest(SavingAccount* saver) {
 void modifyInterestRate(SavingAccount* saver, float newValue) {
     saver->annualInterstRate = newValue;
 }
-int SearchCustomer(SavingAccount* savers[], int accountsOpen, char* accountNum) {
+int searchCustomer(SavingAccount* savers[], int accountsOpen, char* accountNum) {
     for (int i = 0; i < accountsOpen; i++) {
         if (savers[i]->accountNum == accountNum) {
             return i;
@@ -36,7 +36,7 @@ int SearchCustomer(SavingAccount* savers[], int accountsOpen, char* accountNum) 
     return -1;
 }
 bool UpdateAccountBalance(SavingAccount* savers[], int accountsOpen, char* accountNumVal, double balanceVal) {
-    int index = SearchCustomer(savers, accountsOpen, accountNumVal);
+    int index = searchCustomer(savers, accountsOpen, accountNumVal);
     if (index == -1) {
         return false;
     }
@@ -47,21 +47,22 @@ bool UpdateAccountBalance(SavingAccount* savers[], int accountsOpen, char* accou
 int main() {
     SavingAccount* savers[100];
     int accountsOpen = 0;
+    char* accountNum = new char[5];
 
-	OpenCustomerAccount(savers, accountsOpen, "SA00", 1000);
-	OpenCustomerAccount(savers, accountsOpen, "SA01", 2000);
-
-    cout << calculateMonthlyInterest(savers[0]) << endl;
-    cout << calculateMonthlyInterest(savers[1]) << endl;
+    accountNum[0] = 'S';
+    accountNum[1] = 'A';
+    accountNum[2] = '0';
+    accountNum[3] = '0';
+    OpenCustomerAccount(savers, accountsOpen, accountNum, 1000);
 
     modifyInterestRate(savers[0], 0.05);
     modifyInterestRate(savers[1], 0.05);
+    
+    cout << calculateMonthlyInterest(savers[0]) << endl;
+    cout << calculateMonthlyInterest(savers[1]) << endl;
 
-    cout << searchCustomer(savers, accountsOpen, "SA00") << endl;
-    cout << searchCustomer(savers, accountsOpen, "SA01") << endl;
+    cout << searchCustomer(savers, accountsOpen, accountNum) << endl;
 
-    cout << UpdateAccountBalance(savers, accountsOpen, "SA00", 1500) << endl;
-    cout << UpdateAccountBalance(savers, accountsOpen, "SA01", 2500) << endl;
-
+    cout << UpdateAccountBalance(savers, accountsOpen, accountNum, 1500) << endl;
 
 }

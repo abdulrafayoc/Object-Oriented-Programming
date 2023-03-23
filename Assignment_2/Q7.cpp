@@ -2,126 +2,118 @@
 
 using namespace std;
 
-class Student{
+class Student {
 private:
     int stdID;
     string Name;
-    string *coursecodes;
+    string* coursecodes;
     int numCourses;
-    int *courseGrades;
+    int* courseGrades;
     float gpa;
 public:
-    int getStdID(){
+    int getStdID() {
         return stdID;
     }
-    void setStdID(int id){
+    void setStdID(int id) {
         stdID = id;
     }
-    string getName(){
+    string getName() {
         return Name;
     }
-    void setName(string firstName){
+    void setName(string firstName) {
         Name = firstName;
     }
-    int  getNumCourses(){
+    int  getNumCourses() {
         return numCourses;
     }
-    void setNumCourses(int num){
+    void setNumCourses(int num) {
         numCourses = num;
+		coursecodes = new string[numCourses];
+        courseGrades = new int[numCourses];
     }
-    string getCourseCodes(int i){
+    string getCourseCodes(int i) {
         return coursecodes[i];
     }
-    int getCourseGrade(int i){
+    int getCourseGrade(int i) {
         return courseGrades[i];
     }
-    void setCourseGrade(string courseCodes, int grades){
-        for(int i = 0; i < numCourses; i++){
-            if(courseCodes == coursecodes[i]){
+    void setCourseGrade(string courseCodes, int grades) {
+        for (int i = 0; i < numCourses; i++) {
+            if (courseCodes == coursecodes[i]) {
                 courseGrades[i] = grades;
             }
         }
     }
-    float getGPA(){
+    float getGPA() {
         return gpa;
     }
-    void calcGPA(){
+    void calcGPA() {
         int sum = 0;
-        for(int i = 0; i < numCourses; i++){
+        for (int i = 0; i < numCourses; i++) {
             sum += courseGrades[i];
         }
-        gpa = sum / numCourses;
+        gpa = ((sum / numCourses)/20)-1;
     }
-    void addCourse(string courseCode, int grade){
-        string *temp = new string[numCourses + 1];
-        int *temp2 = new int[numCourses + 1];
-        for(int i = 0; i < numCourses; i++){
+    void addCourse(string courseCode, int grade) {
+        string* temp = new string[numCourses + 1];
+        int* temp2 = new int[numCourses + 1];
+        for (int i = 0; i < numCourses; i++) {
             temp[i] = coursecodes[i];
             temp2[i] = courseGrades[i];
         }
         temp[numCourses] = courseCode;
         temp2[numCourses] = grade;
-        delete [] coursecodes;
-        delete [] courseGrades;
+        delete[] coursecodes;
+        delete[] courseGrades;
         coursecodes = temp;
         courseGrades = temp2;
         numCourses++;
     }
-
-    // void print(){
-    //     cout << "Student ID: " << stdID << endl;
-    //     cout << "Student Name: " << Name << endl;
-    //     cout << "Student Courses: " << endl;
-    //     for(int i = 0; i < numCourses; i++){
-    //         cout << coursecodes[i] << " " << courseGrades[i] << endl;
-    //     }
-    //     cout << "Student GPA: " << gpa << endl;
-    // }
 };
 
-Student getStudentAt(Student students[], int index){
+Student getStudentAt(Student students[], int index) {
     return students[index];
 }
-float calcClassGPA(Student students[], int numStudents){
+float calcClassGPA(Student students[], int numStudents) {
     float sum = 0;
-    for(int i = 0; i < numStudents; i++){
+    for (int i = 0; i < numStudents; i++) {
         sum += students[i].getGPA();
     }
     return sum / numStudents;
 }
-float getMaxGPA(Student students[], int numStudents){
+float getMaxGPA(Student students[], int numStudents) {
     float max = students[0].getGPA();
-    for(int i = 1; i < numStudents; i++){
-        if(students[i].getGPA() > max){
+    for (int i = 1; i < numStudents; i++) {
+        if (students[i].getGPA() > max) {
             max = students[i].getGPA();
         }
     }
     return max;
 }
-int getMinGPA(Student students[], int numStudents){
+int getMinGPA(Student students[], int numStudents) {
     float min = students[0].getGPA();
-    for(int i = 1; i < numStudents; i++){
-        if(students[i].getGPA() < min){
+    for (int i = 1; i < numStudents; i++) {
+        if (students[i].getGPA() < min) {
             min = students[i].getGPA();
         }
     }
     return min;
 }
-void printStudentRecord(Student student){
+void printStudentRecord(Student student) {
     cout << "Student ID: " << student.getStdID() << endl;
     cout << "Student Name: " << student.getName() << endl;
     cout << "Student Courses: " << endl;
-    for(int i = 0; i < student.getNumCourses(); i++){
+    for (int i = 0; i < student.getNumCourses(); i++) {
         cout << student.getCourseCodes(i) << " " << student.getCourseGrade(i) << endl;
     }
     cout << "Student GPA: " << student.getGPA() << endl;
 }
-void printAllStudentRecord(Student students[],int numStudents){
-    for(int i = 0; i < numStudents; i++){
+void printAllStudentRecord(Student students[], int numStudents) {
+    for (int i = 0; i < numStudents; i++) {
         cout << "Student ID: " << students[i].getStdID() << endl;
         cout << "Student Name: " << students[i].getName() << endl;
         cout << "Student Courses: " << endl;
-        for(int j = 0; j < students[i].getNumCourses(); j++){
+        for (int j = 0; j < students[i].getNumCourses(); j++) {
             cout << students[i].getCourseCodes(j) << " " << students[i].getCourseGrade(j) << endl;
         }
         cout << "Student GPA: " << students[i].getGPA() << endl;
@@ -129,20 +121,20 @@ void printAllStudentRecord(Student students[],int numStudents){
 }
 
 int main() {
-    Student students[5];
-    for (int i = 0; i < 5; i++) {
-        students[i].setStdID(i);
-        students[i].setName("Student" + i);
-        students[i].setNumCourses(3);
-        students[i].setCourseGrade("CS101", 90);
-        students[i].setCourseGrade("CS102", 80);
-        students[i].setCourseGrade("CS103", 70);
-        students[i].calcGPA();
-    }
-    cout << students->getNumCourses();
-    printAllStudentRecord(students, 5);
-    cout << "Class GPA: " << calcClassGPA(students, 5) << endl;
-    cout << "Max GPA: " << getMaxGPA(students, 5) << endl;
-    cout << "Min GPA: " << getMinGPA(students, 5) << endl;
+    Student student;
+        student.setStdID(1);
+        student.setName("Student");
+        //student.setNumCourses(3);
+        student.addCourse("CS101", 90);
+        student.addCourse("CS102", 80);
+        student.addCourse("CS103", 70);
+        //cout << student.getCourseGrade(0);
+
+        student.calcGPA();
+    cout << student.getNumCourses();
+	printStudentRecord(student);
+    /*cout << "Class GPA: " << calcClassGPA(student, 5) << endl;
+    cout << "Max GPA: " << getMaxGPA(student, 5) << endl;
+    cout << "Min GPA: " << getMinGPA(student, 5) << endl;*/
     return 0;
 }
