@@ -135,31 +135,3 @@ Library mostExpensiveBook(Library  books[10]) {
     }
     return exp;
 }
-
-int main() {
-    Library books[10];
-    char* book = new char[5];
-    book[0] = 'b';
-    book[1] = 'o';
-    book[2] = 'k';
-    book[3] = '1';
-
-    char* author = new char[5];
-    author[0] = 'm';
-    author[1] = 'a';
-    author[2] = 'n';
-    author[3] = '1';
-    
-    books[1].setBookTitle(book);
-    books[1].setAuthor(author);
-    books[1].setBookID(1);
-    books[1].setQuantity(10);
-    books[1].setPrice(100);
-    
-    cout << books[1].getBookTitle() << endl;
-    cout << books[1].getAuthor() << endl;
-    cout << books[1].getBookID() << endl;
-    cout << books[1].getQuantity() << endl;
-    cout << books[1].getPrice() << endl;
-    cout << books[1].getTotalBooks() << endl;
-}

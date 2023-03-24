@@ -143,24 +143,4 @@ public:
             }
         }
     }
-    };
-
-
-int main() {
-    char* str = new char[7];
-    cin >> str;
-    String s1(str);
-    s1.Print();
-    cout << s1.charAt('l') << endl;
-    cout << s1.stringLength() << endl;
-    cout << "get data : " << s1.getData() << endl;
-    cout << "is EMpty : " << s1.isEmpty() << endl;
-    cout << "is Equal" << s1.isEqual(str) << endl;
-    cout << s1.equalsIgnoreCase(str) << endl;
-    char* strr = new char[10];
-    cin >> strr;
-    cout << s1.substring(strr, 0) << endl;
-    cout << s1.substring(strr, 0, 10) << endl;
-    cout << s1.equalsIgnoreCase(str) << endl;
-    s1.clear();
-}
+};

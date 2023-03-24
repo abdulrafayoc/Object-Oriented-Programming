@@ -47,16 +47,16 @@ public:
     float floatValue(){
         return (float)num;
     }
-    int plus(const Integer &n){
+    Integer plus(const Integer &n){
         return num + n.num;
     }
-    int minus(const Integer &n){
+    Integer minus(const Integer &n){
         return num - n.num;
     }
-    int multiple(const Integer &n){
+    Integer multiple(const Integer &n){
         return num * n.num;
     }
-    int divide(const Integer &n){
+    Integer divide(const Integer &n){
         return num / n.num;
     }
     static int numberOfLeadingZeros(int i){
@@ -126,20 +126,4 @@ public:
     }
 
 };
-int main() {
-    Integer i1(10);
-    Integer i2(20);
-	cout << i1.plus(i2) << endl;//output 30
-	cout << i1.minus(i2) << endl;//output -10
-	cout << i1.multiple(i2) << endl;//output 200
-	cout << i1.divide(i2) << endl;//output 0
-	cout << i1.compareTo(i2) << endl;//output 0
-	cout << i1.doubleValue() << endl;//output 10.0
-	cout << i1.floatValue() << endl;//output 10.0
-	cout << i1.bitCount() << endl;//output 2
-	cout << Integer::numberOfLeadingZeros(10) << endl;//output 28
-	cout << Integer::numberOfTrailongZeros(10) << endl;//output 1
-	cout << Integer::toBinaryString(10) << endl;//output 1010
-	cout << Integer::toHexString(10) << endl;//output A
-    return 0;
-}
+

@@ -196,16 +196,3 @@ public:
         }
     }
 };
-
-int main()
-{
-    Image img(3, 3, 3);
-    Pixel p(255, 255, 255);
-    img.fill(p);
-    cout << img.getAverageBrightness() << endl;
-    cout << img.getMaximumBrightness(0) << endl;
-    cout << img.countBrightPixel() << endl;
-    img.transposePixel(0);
-    img.clear();
-    return 0;
-}

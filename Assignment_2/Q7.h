@@ -119,22 +119,3 @@ void printAllStudentRecord(Student students[], int numStudents) {
         cout << "Student GPA: " << students[i].getGPA() << endl;
     }
 }
-
-int main() {
-    Student student;
-        student.setStdID(1);
-        student.setName("Student");
-        //student.setNumCourses(3);
-        student.addCourse("CS101", 90);
-        student.addCourse("CS102", 80);
-        student.addCourse("CS103", 70);
-        //cout << student.getCourseGrade(0);
-
-        student.calcGPA();
-    cout << student.getNumCourses();
-	printStudentRecord(student);
-    /*cout << "Class GPA: " << calcClassGPA(student, 5) << endl;
-    cout << "Max GPA: " << getMaxGPA(student, 5) << endl;
-    cout << "Min GPA: " << getMinGPA(student, 5) << endl;*/
-    return 0;
-}
