@@ -2,26 +2,136 @@
 
 using namespace std;
 
-class 
+class Creature {
+    string name;
+    int level;
+    int life;
+    int force;
+    int position;
+public:
+    Creature(string name, int level, int life, int force, int position = 0) {
+        this->name = name;
+        this->level = level;
+        this->life = life;
+        this->force = force;
+        this->position = position;
+    }
+    string getName() {
+        return name;
+    }
+    int getLevel() {
+        return level;
+    }
+    void setLevel(int level) {
+        this->level = level;
+    }
+    int getLife() {
+        return life;
+    }
+    int getForce() {
+        return force;
+    }
+    int getPosition() {
+        return position;
+    }
+    void setPosition(int position) {
+        this->position = position;
+    }
+    bool alive() {
+        return life > 0 ? true : false;
+    }
+    int attackPoints() {
+        if (alive())
+            return level * force;
+        else
+            return 0;
+    }
+    void Move(int steps) {
+        if (alive())
+            position += steps;
+    }
+    void GoodBye() {
+        cout << "English:" << this->name << " is no more!";
+    }
+    void Weak(int points) {
+        if (alive()) {
+            life -= points;
+            if (life <= 0) {
+                life = 0;
+                GoodBye();
+            }
+        }
+    }
+    void display() {
+        cout << name << ", level: " << level << ", health_status: " << life << ", force: " << force << ", Attacking Points: " << attackPoints() << ", position: " << position;
+    }
+};
+
+class Dragon : public Creature {
+public:
+    int flame;
+    Dragon(string name, int level, int life, int force, int flame, int position = 0) : Creature(name, level, life, force, position) {
+        this->flame = flame;
+    }
+    void Fly(int position) {
+        if (alive())
+            setPosition(position);
+    }
+    void BlowFlame(Creature& creature) {
+        if (alive() && creature.alive() && (distance(creature) <= flame)) {
+            creature.Weak(attackPoints());
+        }
+        Weak(distance(creature));
+        if (alive() && !creature.alive()){
+            setLevel(getLevel() + 1);
+        }
+    }
+    int distance(Creature& creature) {
+        return abs(getPosition() - creature.getPosition());
+    }
+    void display() {
+        Creature::display();
+        cout << ", flame: " << flame << endl;
+    }
+};
+
+class Ichneumon : public Creature {
+public:
+    int poison;
+    int neck;
+    Ichneumon(string name, int level, int life, int force, int poison, int neck, int position = 0) : Creature(name, level, life, force, position) {
+        this->poison = poison;
+        this->neck = neck;
+    }
+    void InjectPoison(Creature& creature) {
+        if (alive() && creature.alive() && (distance(creature) <= neck)) {
+            creature.Weak(attackPoints() + poison);
+        }
+        Weak(distance(creature));
+        if (alive() && !creature.alive()){
+            setLevel(getLevel() + 1);
+        }
+    }
+    int distance(Creature& creature) {
+        return abs(getPosition() - creature.getPosition());
+    }
+    void display() {
+        Creature::display();
+        cout << ", poison: " << poison << ", neck: " << neck << endl;
+    }
+};
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void Fight(Dragon& dragon, Ichneumon& ichneumon) {
+    if (dragon.alive() && ichneumon.alive()) {
+        if (dragon.distance(ichneumon) <= dragon.flame) {
+            dragon.BlowFlame(ichneumon);
+        }
+        if (ichneumon.distance(dragon) <= ichneumon.neck) {
+            ichneumon.InjectPoison(dragon);
+        }
+    }
+}
 
 /*-------------------------Main----------------------------------*/
 #include <iostream>
@@ -47,7 +157,7 @@ int main()
 
   cout << endl;
   cout << "Dragon has flown close to ichneumon :" << endl;
-  dragon.Fly(ichneumon.position() - 1);
+  dragon.Fly(ichneumon.getPosition() - 1);
   dragon.display();
 
   cout << endl;
