@@ -4,7 +4,7 @@ using namespace std;
 
 class Block
 {
-private:
+protected:
     string form;
     string color;
 public:
@@ -29,17 +29,23 @@ public:
             out << "(" << form << "," << color << ")";
         return out;
     }
-    ostream & operator << (ostream& out) const {
-        return display(out);
-    }
+    friend ostream & operator << (ostream& out, const Block& b);
 };
+ostream & operator << (ostream& out,Block &B) {
+        // return display(out);
+        if (B.getColor() == "")
+            out << "(" << B.getShape() << ")";
+        else
+            out << "(" << B.getShape() << "," << B.getColor() << ")";
+        return out;
+    }
 
 class Build {
-    Block ***Tower;
     int i;//layers
     int j;//depth
     int k;//width
 public:
+    Block ***Tower;
     Build() {
         
     }
@@ -51,21 +57,6 @@ public:
         Tower[0] = new Block*[j];
         Tower[0][0] = new Block[k];
         Tower[0][0][0] = b;
-    }
-    ostream& display(ostream& out) const {
-        for (int a = 0; a < this->i; a++) {
-            for (int b = 0; b < this->j; b++) {
-                for (int c = 0; c < this->k; c++) {
-                    out << Tower[a][b][c];
-                }
-                out << endl;
-            }
-            out << endl;
-        }
-        return out;
-    }
-    ostream& operator << (ostream& out) const {
-        return display(out);
     }
     Build operator ^ (Build right) {   
         int a = this->i + right.i;
@@ -255,6 +246,7 @@ public:
         for (int i = 0; i < n - 1; i++) {
             temp ^= *this;
         }
+        return temp;
     }
     Build operator % (unsigned int n) {
         //- operator repeated n-1 times
@@ -262,23 +254,36 @@ public:
         for (int i = 0; i < n - 1; i++) {
             temp -= *this;
         }
+        return temp;
     }
+    ostream& display(ostream& out,Build& B) {
+        for (int a = B.i - 1; a >= 0; a--) {
+            cout << "Layer " << a << ":" << endl;
+            for (int b = B.j - 1; b >= 0; b--) {
+                for (int c = B.k - 1; c >= 0; c--) {
+                    out << B.Tower[a][b][c];
+                }
+                out << endl;
+            }
+            out << endl;
+        }
+        return out;
+    }
+     
+    friend ostream& operator << (ostream& out,Build &b) ;
 };
+     ostream& operator << (ostream& out,Build &b)  {
+        return b.display(out,b);
+    }
 
 int main() {
-    Block b1("simple","red");
-    Block b2("simple","red");
-    Block b3("simple","red");
-    Block b4("simple","red");
-
-    Build B(b1);
-    B += b2;
-    B += b3;
-    B += b4;
-    cout << b1 << endl;
-    cout << B << endl;
-
-
-    return 0;
-}
-
+    Block b("","");
+    Block b1("Simple", "White");
+    Block b2("Simple", "Red");
+    Block b3("ObliquedL", "Red");
+    Block b4("ObliquedR", "Red");
+    Build B1(b1);
+    Build B2(b2);
+    Build B3(b3);
+    Build B4(b4);
+} 
