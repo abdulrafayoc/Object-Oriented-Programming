@@ -59,6 +59,7 @@ public:
         Tower[0][0][0] = b;
     }
     Build operator ^ (Build right) {   
+        //Creates new array and adds this->Tower to it 
         int a = this->i + right.i;
         int b = this->j;
         int c = this->k;
@@ -67,6 +68,7 @@ public:
             temp[i] = new Block*[b];
             for (int j = 0; j < b; j++) {
                 temp[i][j] = new Block[c];
+                //Adds right.Tower to the top of the new array
                 for (int k = 0; k < c; k++) {
                     if (i < this->i) {
                         temp[i][j][k] = this->Tower[i][j][k];
@@ -80,6 +82,7 @@ public:
     return ***temp;
     }
     void operator ^= (Build right) {
+        //Creates new array and adds this->Tower to it
         int a = this->i + right.i;
         int b = this->j;
         int c = this->k;
@@ -89,6 +92,7 @@ public:
             for (int j = 0; j < b; j++) {
                 temp[i][j] = new Block[c];
                 for (int k = 0; k < c; k++) {
+                    //Adds right.Tower to the top of the new array
                     if (i < this->i) {
                         temp[i][j][k] = this->Tower[i][j][k];
                     }
@@ -111,6 +115,7 @@ public:
         this->k = c;
     }
     Build operator - (Build right) {
+        // Creates new array and adds this->Tower to it
         if (this->i > right.i) {
             return *this;
         }
@@ -123,6 +128,7 @@ public:
             for (int j = 0; j < b; j++) {
                 temp[i][j] = new Block[c];
                 for (int k = 0; k < c; k++) {
+                    // Adds right.Tower to the back of the new array
                     if (j < this->j) {
                         temp[i][j][k] = this->Tower[i][j][k];
                     }
@@ -135,6 +141,7 @@ public:
         return ***temp;
     }
     void operator -= (Build right) {
+        // Creates new array and adds this->Tower to it
         if (this->i > right.i) {
             return;
         }
@@ -147,6 +154,7 @@ public:
             for (int j = 0; j < b; j++) {
                 temp[i][j] = new Block[c];
                 for (int k = 0; k < c; k++) {
+                    // Adds right.Tower to the back of the new array
                     if (j < this->j) {
                         temp[i][j][k] = this->Tower[i][j][k];
                     }
@@ -184,6 +192,7 @@ public:
             for (int j = 0; j < b; j++) {
                 temp[i][j] = new Block[c];
                 for (int k = 0; k < c; k++) {
+                    // Adds right.Tower to the side of the new array
                     if (k < this->k) {
                         temp[i][j][k] = this->Tower[i][j][k];
                     }
@@ -196,6 +205,7 @@ public:
         return ***temp;
     }
     void operator += (Build right) {
+        // Creates new array and adds this->Tower to it
         if (this->i > right.i) {
             return;
         }
@@ -211,6 +221,7 @@ public:
             for (int j = 0; j < b; j++) {
                 temp[i][j] = new Block[c];
                 for (int k = 0; k < c; k++) {
+                    // Adds right.Tower to the side of the new array
                     if (k < this->k) {
                         temp[i][j][k] = this->Tower[i][j][k];
                     }
@@ -303,16 +314,3 @@ int main() {
     B3 -= B4;
     cout << B1 << endl;
 } 
-    
-    
-    // B1 ^= B3;
-    // B1 ^= B3;
-    // cout << B2 << endl;
-    // cout << B3 << endl;
-   // Build tower(B3^B3);
-    // B4 = B1 - B2;
-
-    // Build B5 = B3 ^ B4;
-    // Build B6 = B5 * 3;
-
-    // cout << B6 << endl;
