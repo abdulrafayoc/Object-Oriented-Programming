@@ -40,20 +40,20 @@ public:
     bool alive() {
         return life > 0 ? true : false;
     }
-    int attackPoints() {
+    int attackPoints() { // Creature attacks with force*level
         if (alive())
             return level * force;
         else
             return 0;
     }
-    void Move(int steps) {
+    void Move(int steps) { // Creature moves forward
         if (alive())
             position += steps;
     }
-    void GoodBye() {
+    void GoodBye() { // Creature is dead
         cout << "English:" << this->name << " is no more!";
     }
-    void Weak(int points) {
+    void Weak(int points) { // Creature is attacked
         if (alive()) {
             life -= points;
             if (life <= 0) {
@@ -77,11 +77,11 @@ public:
         if (alive())
             setPosition(position);
     }
-    void BlowFlame(Creature& creature) {
+    void BlowFlame(Creature& creature) { // Dragon attacks with flame
         if (alive() && creature.alive() && (distance(creature) <= flame)) {
             creature.Weak(attackPoints());
+            Weak(distance(creature));
         }
-        Weak(distance(creature));
         if (alive() && !creature.alive()){
             setLevel(getLevel() + 1);
         }
@@ -91,7 +91,7 @@ public:
     }
     void display() {
         Creature::display();
-        cout << ", flame: " << flame << endl;
+        // cout << ", flame: " << flame << endl;
     }
 };
 
@@ -103,11 +103,11 @@ public:
         this->poison = poison;
         this->neck = neck;
     }
-    void InjectPoison(Creature& creature) {
+    void InjectPoison(Creature& creature) { // Ichneumon attacks with poison
         if (alive() && creature.alive() && (distance(creature) <= neck)) {
             creature.Weak(attackPoints() + poison);
         }
-        Weak(distance(creature));
+        // Weak(distance(creature));
         if (alive() && !creature.alive()){
             setLevel(getLevel() + 1);
         }
@@ -117,12 +117,12 @@ public:
     }
     void display() {
         Creature::display();
-        cout << ", poison: " << poison << ", neck: " << neck << endl;
+        // cout << ", poison: " << poison << ", neck: " << neck << endl;
     }
 };
 
 
-void Fight(Dragon& dragon, Ichneumon& ichneumon) {
+void Fight(Dragon& dragon, Ichneumon& ichneumon) { // Fight between dragon and ichneumon
     if (dragon.alive() && ichneumon.alive()) {
         if (dragon.distance(ichneumon) <= dragon.flame) {
             dragon.BlowFlame(ichneumon);
