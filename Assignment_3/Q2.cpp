@@ -124,11 +124,11 @@ public:
 
 void Fight(Dragon& dragon, Ichneumon& ichneumon) { // Fight between dragon and ichneumon
     if (dragon.alive() && ichneumon.alive()) {
-        if (dragon.distance(ichneumon) <= dragon.flame) {
-            dragon.BlowFlame(ichneumon);
-        }
         if (ichneumon.distance(dragon) <= ichneumon.neck) {
             ichneumon.InjectPoison(dragon);
+        }
+        if (dragon.distance(ichneumon) <= dragon.flame) {
+            dragon.BlowFlame(ichneumon);
         }
     }
 }
