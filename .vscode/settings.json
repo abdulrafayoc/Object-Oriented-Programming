@@ -1,7 +1,10 @@
 {
+    "cmake.configureOnOpen": true,
     "files.associations": {
-        "ostream": "cpp",
         "iostream": "cpp",
-        "iosfwd": "cpp"
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "xutility": "cpp",
+        "ostream": "cpp"
     }
 }
