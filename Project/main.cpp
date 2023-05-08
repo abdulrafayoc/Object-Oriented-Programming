@@ -1,4 +1,5 @@
 #include <iostream>
+<<<<<<< HEAD
 #include <string>
 
 #include "classes.h"
@@ -223,3 +224,16 @@ int main () {
 	// cout << endl;
 	// flight6.display();
 	// cout << endl;
+=======
+
+#include "module1.h"
+#include "module2.h"
+#include "module3.h"
+
+
+using namespace std;
+
+int main () {
+    
+}
+>>>>>>> 6f54aedacc58abe362fdbe93ae9b656f8007f6b7
