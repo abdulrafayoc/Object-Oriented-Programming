@@ -11,11 +11,9 @@
 using namespace std;
 
 
-
 string getPassword() {
     string password;
     char ch;
-    cout << "Enter password: ";
     ch = _getch();
     while(ch != 13) { // character 13 is enter
         password.push_back(ch);
