@@ -5,17 +5,168 @@
 
 #include "classes.h"
 #include "misc.h"
+#include "menu.h"
+
+#include "booking.h"
 #include <iostream>
 #include <string>
 
 using namespace std;
 
+void adminMenu(Airport* airports, Plane* planes, Flight* flights, Passanger* passangers, Admin* admins) {
+    cout << "\033[94m 1: \033[0m Add Airport" << endl;
+    cout << "\033[94m 2: \033[0m Add Plane" << endl;
+    cout << "\033[94m 3: \033[0m Add Flight" << endl;
+    cout << "\033[94m 4: \033[0m Edit Flight" << endl;
+
+    cout << "\033[94m 5: \033[0m View Flights" << endl;
+    cout << "\033[94m 6: \033[0m View Airports" << endl;
+    cout << "\033[94m 7: \033[0m View Planes" << endl;
+    
+    cout << "\033[94m 8: \033[0m View Passangers" << endl;
+    cout << "\033[94m 9: \033[0m View Admins" << endl;
+
+    cout << "\033[31m 10: \033[0m Back" << endl;
+
+    int choice;
+
+    cout << " Enter your choice: ";
+    cin >> choice;
+
+    if (choice == 1) {
+        processing("Opening Add Airport Menu", "Done", true);
+        cout << " Enter Airport Name: ";
+        string name;
+        cin >> name;
+        cout << " Enter city: ";
+        string city;
+        cin >> city;
+        
+        Airport air(name, city);
+        airports = addAirport(&air, airports);
+        processing("Adding Airport...", "Airport added!", true);
+        adminMenu(airports, planes, flights, passangers, admins);
+    }
+    else if (choice == 2) {
+        processing("Opening Add Plane Menu", "Done", true);
+        cout << " Enter Plane Name: ";
+        string name;
+        cin >> name;
+        cout << " Enter Plane id: ";
+        int id;
+        cin >> id;
+
+        Plane plane(name, id);
+        planes = addPlane(&plane, planes);
+        processing("Adding Plane...", "Plane added!", true);
+        adminMenu(airports, planes, flights, passangers, admins);
+    }
+    else if (choice == 3) {
+        processing("Opening Add Flight Menu", "Done", true);
+        addNewFlight(airports, planes, flights, passangers, admins);
+        adminMenu(airports, planes, flights, passangers, admins);
+    }
+    else if (choice == 4) {
+        processing("Opening Edit Flight Menu", "Done", true);
+        editFlight(airports, planes, flights, passangers, admins);
+        adminMenu(airports, planes, flights, passangers, admins);
+    }
+    else if (choice == 5) {
+        processing("Opening View Flights Menu", "Done", true);
+        viewFlights(flights);
+        adminMenu(airports, planes, flights, passangers, admins);
+    }
+    else if (choice == 6) {
+        processing("Opening View Airports Menu", "Done", true);
+        viewAirports(airports);
+        adminMenu(airports, planes, flights, passangers, admins);
+    }
+    else if (choice == 7) {
+        processing("Opening View Planes Menu", "Done", true);
+        viewPlanes(planes);
+        adminMenu(airports, planes, flights, passangers, admins);
+    }
+    else if (choice == 8) {
+        processing("Opening View Passangers Menu", "Done", true);
+        viewPassangers(passangers);
+        adminMenu(airports, planes, flights, passangers, admins);
+    }
+    else if (choice == 9) {
+        processing("Opening View Admins Menu", "Done", true);
+        viewAdmins(admins);
+        adminMenu(airports, planes, flights, passangers, admins);
+    }
+    else if (choice == 0) {
+        processing("Going back...", "Done", true);
+        return;
+    } else {
+        processing("Going back...", "Done", true);
+        return;
+    }
+
+}
+
+void passangerMenu(Passanger& pass, Flight* flights) {
+    cout << "\033[94m 1: \033[0m Book a Flight" << endl;
+    cout << "\033[94m 2: \033[0m Cancel a Flight" << endl;
+
+    cout << "\033[94m 3: \033[0m View Booked Flight" << endl;
+    cout << "\033[94m 4: \033[0m View Account Details" << endl;
+    cout << "\033[94m 5: \033[0m Edit Account Details" << endl;
+
+    // cout << "\033[94m 6: \033[0m Add dependents" << endl;
+
+    cout << "\033[31m 7: \033[0m Back" << endl;
+
+    int choice;
+    cout << " Enter your choice: ";
+    cin >> choice;
+
+    switch (choice) {
+    case 1:
+        processing("Opening Booking Menu", "Done", true);
+        bookingMenu(pass, flights);
+        passangerMenu(pass, flights);
+        break;
+    case 2:
+        processing("Opening Cancel Menu", "Done", true);
+        cancelFlight(pass, flights);
+        passangerMenu(pass, flights);
+        break;
+    case 3:
+        processing("Opening View Booked Flights Menu", "Done", true);
+        viewBookedFlights(pass, flights);
+        passangerMenu(pass, flights);
+        break;
+    case 4:
+        processing("Opening View Account Details Menu", "Done", true);
+        pass.display();
+        passangerMenu(pass, flights);
+        break;
+    case 5:
+        processing("Opening Edit Account Details Menu", "Done", true);
+        pass.editDetails();
+        passangerMenu(pass, flights);
+        break;
+    case 6:
+        // pass.addDependents();/////////////////////////////////////
+        break;
+    case 7:
+        return;
+        break;
+    default:
+        return;
+        break;
+    }
+    processing("Going back...", "Done", true);
+}
 
 bool checkPassanger(string username, Passanger* passangers) {
     int size = passangers->num;
 
     for (int i = 0; i < size; i++) {
         if (passangers[i].getUsername() == username) {
+
             return true;
         }
     }
@@ -37,7 +188,6 @@ bool checkPassangerPassword(string username, string password, Passanger* passang
 
 Passanger* addPassanger(Passanger& pass, Passanger* passangers) {
     int size = pass.num;
-    // cout << "size " << size << endl;
 
     Passanger* temp = new Passanger[size + 1];
 
@@ -45,14 +195,10 @@ Passanger* addPassanger(Passanger& pass, Passanger* passangers) {
         temp[i] = passangers[i];
     }
 
-    // cout << "size " << size << endl;
-
     temp[size] = pass;
-    
     pass.num++;
     return temp;
 }
-
 
 bool checkAdmin(string username, Admin* admins) {
     int size = admins->num;
@@ -62,7 +208,6 @@ bool checkAdmin(string username, Admin* admins) {
             return true;
         }
     }
-
     return false;
 }
 
@@ -79,7 +224,7 @@ bool checkAdminPassword(string username, string password, Admin* admins) {
 }
 
 Admin* addAdmin(Admin& adm, Admin* admins) {
-    int size = admins->num - 1;
+    int size = admins->num;
 
     Admin* temp = new Admin[size + 1];
 
@@ -88,35 +233,45 @@ Admin* addAdmin(Admin& adm, Admin* admins) {
     }
 
     temp[size] = adm;
-    admins = temp;
     admins->num++;
     return temp;
 }
 
+Passanger* getPassanger(string username, Passanger* passangers) {
+    int size = passangers->num;
 
-void passLogin(Passanger* passangers) {
+    for (int i = 0; i < size; i++) {
+        if (passangers[i].getUsername() == username) {
+            return &passangers[i];
+        }
+    }
+    return NULL;
+}
+
+void passLogin(Passanger* passangers, Flight* flights) {
     string username, password;
     cout << " Enter username: ";
     cin >> username;
     cout << " Enter password: ";
     password = getPassword();
 
-    if(checkPassanger(username, passangers)) {
-        if(checkPassangerPassword(username, password, passangers)) {
+    if (checkPassanger(username, passangers)) {
+        if (checkPassangerPassword(username, password, passangers)) {
             processing("Loging in...", "Welcome!", true);
-            // passangerMenu();
-        } else {
-            processing("Incorrect password!", "Try again", false);
-            passLogin(passangers);
+            passangerMenu(*getPassanger(username, passangers), flights);
         }
-    } 
+        else {
+            processing("Incorrect password!", "Try again", false);
+            passLogin(passangers, flights);
+        }
+    }
     else {
         processing("User not found!", "Try again", false);
-        passLogin(passangers);
+        passLogin(passangers, flights);
     }
 }
 
-void passSignup(Passanger* passangers) {
+void passSignup(Passanger* passangers, Flight* flights) {
     string name, username, password;
     cout << " Enter name: ";
     cin >> name;
@@ -125,76 +280,76 @@ void passSignup(Passanger* passangers) {
     cout << " Enter password: ";
     password = getPassword();
 
-    if(checkPassanger(username, passangers)) {
+    if (checkPassanger(username, passangers)) {
         processing("Checking...", "Username already exists!", false);
         cout << " Do you want to login? (y/n): ";
-        
+
         char choice;
         cin >> choice;
 
-        if(choice == 'y' || choice == 'Y') {
-            passLogin(passangers);
+        if (choice == 'y' || choice == 'Y') {
+            passLogin(passangers, flights);
         }
-        else if (choice == 'n' || choice == 'N'){
-            passSignup(passangers);
+        else if (choice == 'n' || choice == 'N') {
+            passSignup(passangers, flights);
         }
         else {
             cout << "Invalid choice!" << endl;
-            passSignup(passangers);
+            passSignup(passangers, flights);
         }
-    } 
+    }
     else {
         long long int cnic;
         do {
             cout << " Enter 13-digit CNIC: ";
             cin >> cnic;
-            if(cnic < 1000000000000 || cnic > 9999999999999) {
+            if (cnic < 1000000000000 || cnic > 9999999999999) {
                 cout << " Invalid CNIC!" << endl;
             }
-        } while(cnic < 1000000000000 || cnic > 9999999999999);
+        } while (cnic < 1000000000000 || cnic > 9999999999999);
 
         long long int passId;
         do {
             cout << " Enter 10-digit passport ID: ";
             cin >> passId;
-            if(passId < 1000000000 || passId > 9999999999) {
+            if (passId < 1000000000 || passId > 9999999999) {
                 cout << " Invalid passport ID!" << endl;
             }
-        } while(passId < 1000000000 || passId > 9999999999);
-        
+        } while (passId < 1000000000 || passId > 9999999999);
+
         Passanger pass(name, username, password, cnic);
-        addPassanger(pass, passangers);
+        passangers = addPassanger(pass, passangers);
 
 
         processing("Signing up...", "Welcome!", true);
-        // passangerMenu();
+        passangerMenu(*getPassanger(username, passangers), flights);
     }
 }
 
-
-void adminLogin(Admin* admins) {
+void adminLogin(Admin* admins, Flight* flights, Passanger* passangers, Airport* airports, Plane* planes) {
     string username, password;
     cout << " Enter username: ";
     cin >> username;
     cout << " Enter password: ";
     password = getPassword();
 
-    if(checkAdmin(username, admins)) {
-        if(checkAdminPassword(username, password, admins)) {
+    if (checkAdmin(username, admins)) {
+        if (checkAdminPassword(username, password, admins)) {
             processing("Loging in...", "Welcome!", true);
-            // adminMenu();
-        } else {
-            processing("Incorrect password!", "Try again", false);
-            adminLogin(admins);
+            adminMenu(airports, planes, flights, passangers, admins);
         }
-    } 
+        else {
+            processing("Incorrect password!", "Try again", false);
+            adminLogin(admins, flights, passangers, airports, planes);
+        }
+    }
     else {
         processing("User not found!", "Try again", false);
-        adminLogin(admins);
+        adminLogin(admins, flights, passangers, airports, planes);
     }
 }
 
-void adminSignup(Admin* admins) {
+void adminSignup(Admin* admins, Flight* flights, Passanger* passangers, Airport* airports, Plane* planes) {
     string name, username, password;
     cout << " Enter name: ";
     cin >> name;
@@ -203,34 +358,34 @@ void adminSignup(Admin* admins) {
     cout << " Enter password: ";
     password = getPassword();
 
-    if(checkAdmin(username, admins)) {
+    if (checkAdmin(username, admins)) {
         processing("Checking...", "Username already exists!", false);
         cout << " Do you want to login? (y/n): ";
-        
+
         char choice;
         cin >> choice;
 
-        if(choice == 'y' || choice == 'Y') {
-            adminLogin(admins);
+        if (choice == 'y' || choice == 'Y') {
+            adminLogin(admins, flights, passangers, airports, planes);
         }
-        else if (choice == 'n' || choice == 'N'){
-            adminSignup(admins);
+        else if (choice == 'n' || choice == 'N') {
+            adminSignup(admins, flights, passangers, airports, planes);
         }
         else {
             cout << "Invalid choice!" << endl;
-            adminSignup(admins);
+            adminSignup(admins, flights, passangers, airports, planes);
         }
-    } 
+    }
     else {
         cout << " Enter Role: ";
         string role;
         cin >> role;
 
         Admin adm(name, username, password, role);
-        addAdmin(adm, admins);
+        admins = addAdmin(adm, admins);
 
         processing("Signing up...", "Welcome!", true);
-        // adminMenu();
+        adminMenu(airports, planes, flights, passangers, admins);
     }
 }
 
