@@ -114,7 +114,7 @@ void passangerMenu(Passanger& pass, Flight* flights) {
     cout << "\033[94m 4: \033[0m View Account Details" << endl;
     cout << "\033[94m 5: \033[0m Edit Account Details" << endl;
 
-    // cout << "\033[94m 6: \033[0m Add dependents" << endl;
+    cout << "\033[94m 6: \033[0m Add balance" << endl;
 
     cout << "\033[31m 7: \033[0m Back" << endl;
 
@@ -122,6 +122,7 @@ void passangerMenu(Passanger& pass, Flight* flights) {
     cout << " Enter your choice: ";
     cin >> choice;
 
+        int temp;
     switch (choice) {
     case 1:
         processing("Opening Booking Menu", "Done", true);
@@ -149,7 +150,8 @@ void passangerMenu(Passanger& pass, Flight* flights) {
         passangerMenu(pass, flights);
         break;
     case 6:
-        // pass.addDependents();/////////////////////////////////////
+        cout << "enter balance" << endl;
+        cin >> temp;
         break;
     case 7:
         return;
